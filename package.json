@@ -1,0 +1,23 @@
+{
+  "name": "levenshtein-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "jest",
+    "format": "prettier . --write"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
+  },
+  "module": "module",
+  "dependencies": {
+    "prettier": "^3.2.5"
+  }
+}

@@ -1,21 +1,24 @@
 {
-  "name": "levenshtein-ts",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "tsc": "tsc",
-    "format": "prettier . --write",
-    "test": "node index.test.js",
-    "build": "npm run format && npm run tsc && npm run test"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^5.4.5"
-  },
-  "type": "module",
-  "dependencies": {
-    "prettier": "^3.2.5"
-  }
+    "name": "levenshtein-ts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "tsc": "tsc",
+        "format": "prettier . --write",
+        "test": "node index.test.js",
+        "build": "npm run format && npm run tsc && npm run test"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^5.4.5"
+    },
+    "type": "module",
+    "dependencies": {
+        "prettier": "^3.2.5"
+    },
+    "prettier": {
+        "tabWidth": 4
+    }
 }

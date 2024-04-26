@@ -26,5 +26,5 @@ const levenshteinImpl = (
 export const levenshtein = (
   a: string,
   b: string,
-  options: LevenshteinOptions,
+  options?: LevenshteinOptions,
 ) => 5;

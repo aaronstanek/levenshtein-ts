@@ -13,7 +13,7 @@ const expect = (
     result = resolver();
   } catch (e: any) {
     failedTests += 1;
-    console.log(`Test threw an exception:\n${errorMessage}`);
+    console.log(`Test threw an exception: ${errorMessage}`);
     return;
   }
   if (result === targetValue) {
@@ -21,7 +21,7 @@ const expect = (
   } else {
     failedTests += 1;
     console.log(
-      `Test failed:\n${errorMessage}\nExpected ${targetValue}\nReceived: ${result}\n`,
+      `Test failed: ${errorMessage}\nExpected: ${targetValue}\nReceived: ${result}\n`,
     );
   }
 };
@@ -39,6 +39,18 @@ expect("one insertion has cost 1", () => levenshtein("", "a"), 1);
 expect("one deletion has cost 1", () => levenshtein("a", ""), 1);
 
 expect("one replacement has cost 1", () => levenshtein("a", "b"), 1);
+
+expect("can insert at the start", () => levenshtein("box", "abox"), 1);
+
+expect("can insert at the end", () => levenshtein("box", "boxa"), 1);
+
+expect("can delete at the start", () => levenshtein("box", "ox"), 1);
+
+expect("can delete at the end", () => levenshtein("box", "bo"), 1);
+
+expect("can replace at the start", () => levenshtein("box", "fox"), 1);
+
+expect("can replace at the end", () => levenshtein("box", "bog"), 1);
 
 console.log(`Passed Tests: ${passedTests}`);
 console.log(`Failed Tests: ${failedTests}`);

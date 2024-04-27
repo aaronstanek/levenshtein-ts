@@ -31,24 +31,37 @@ const levenshteinImpl = (
     if (aIndex >= config.a.length && bIndex >= config.b.length) return cost;
     let bestResult: number | null = null;
     if (aIndex < config.a.length) {
-        bestResult = levenshteinImpl(
-            config,
-            aIndex + 1 + +((config.a.codePointAt(aIndex) as number) > 0xffff),
-            bIndex,
-            cost + config.insertionCost,
-        );
+        const newCost = cost + config.insertionCost;
+        if (config.maxCost < 0 || newCost <= config.maxCost) {
+            bestResult = levenshteinImpl(
+                config,
+                aIndex +
+                    1 +
+                    +((config.a.codePointAt(aIndex) as number) > 0xffff),
+                bIndex,
+                newCost,
+            );
+        }
     }
     if (bIndex < config.b.length) {
-        let result = levenshteinImpl(
-            config,
-            aIndex,
-            bIndex + 1 + +((config.b.codePointAt(bIndex) as number) > 0xffff),
-            cost + config.deletionCost,
-        );
-        if (bestResult === null || (result !== null && result < bestResult))
-            bestResult = result;
-        if (aIndex < config.a.length) {
-            result = levenshteinImpl(
+        const newCost = cost + config.deletionCost;
+        if (config.maxCost < 0 || newCost <= config.maxCost) {
+            const result = levenshteinImpl(
+                config,
+                aIndex,
+                bIndex +
+                    1 +
+                    +((config.b.codePointAt(bIndex) as number) > 0xffff),
+                newCost,
+            );
+            if (bestResult === null || (result !== null && result < bestResult))
+                bestResult = result;
+        }
+    }
+    if (aIndex < config.a.length && bIndex < config.b.length) {
+        const newCost = cost + config.replacementCost;
+        if (config.maxCost < 0 || newCost <= config.maxCost) {
+            const result = levenshteinImpl(
                 config,
                 aIndex +
                     1 +
@@ -56,7 +69,7 @@ const levenshteinImpl = (
                 bIndex +
                     1 +
                     +((config.b.codePointAt(bIndex) as number) > 0xffff),
-                cost + config.replacementCost,
+                newCost,
             );
             if (bestResult === null || (result !== null && result < bestResult))
                 bestResult = result;

@@ -26,33 +26,77 @@ const expect = (
     }
 };
 
-expect("distance between empty strings is zero", () => levenshtein("", ""), 0);
-
 expect(
-    "distance between identical strings is zero",
-    () => levenshtein("a", "a"),
+    "distance between empty strings is zero",
+    () => levenshtein("", "", { maxCost: 3 }),
     0,
 );
 
-expect("one insertion has cost 1", () => levenshtein("", "a"), 1);
+expect(
+    "distance between identical strings is zero",
+    () => levenshtein("a", "a", { maxCost: 3 }),
+    0,
+);
 
-expect("one deletion has cost 1", () => levenshtein("a", ""), 1);
+expect(
+    "one insertion has cost 1",
+    () => levenshtein("", "a", { maxCost: 3 }),
+    1,
+);
 
-expect("one replacement has cost 1", () => levenshtein("a", "b"), 1);
+expect(
+    "one deletion has cost 1",
+    () => levenshtein("a", "", { maxCost: 3 }),
+    1,
+);
 
-expect("can insert at the start", () => levenshtein("box", "abox"), 1);
+expect(
+    "one replacement has cost 1",
+    () => levenshtein("a", "b", { maxCost: 3 }),
+    1,
+);
 
-expect("can insert at the end", () => levenshtein("box", "boxa"), 1);
+expect(
+    "can insert at the start",
+    () => levenshtein("box", "abox", { maxCost: 3 }),
+    1,
+);
 
-expect("can delete at the start", () => levenshtein("box", "ox"), 1);
+expect(
+    "can insert at the end",
+    () => levenshtein("box", "boxa", { maxCost: 3 }),
+    1,
+);
 
-expect("can delete at the end", () => levenshtein("box", "bo"), 1);
+expect(
+    "can delete at the start",
+    () => levenshtein("box", "ox", { maxCost: 3 }),
+    1,
+);
 
-expect("can replace at the start", () => levenshtein("box", "fox"), 1);
+expect(
+    "can delete at the end",
+    () => levenshtein("box", "bo", { maxCost: 3 }),
+    1,
+);
 
-expect("can replace at the end", () => levenshtein("box", "bog"), 1);
+expect(
+    "can replace at the start",
+    () => levenshtein("box", "fox", { maxCost: 3 }),
+    1,
+);
 
-expect("can have a cost greater than one", () => levenshtein("box", "rot"), 2);
+expect(
+    "can replace at the end",
+    () => levenshtein("box", "bog", { maxCost: 3 }),
+    1,
+);
+
+expect(
+    "can have a cost greater than one",
+    () => levenshtein("box", "rot", { maxCost: 3 }),
+    2,
+);
 
 expect(
     "can limit insertion cost using maxCost",
@@ -95,19 +139,19 @@ expect(
 
 expect(
     "can set insertionCost to arbitaryValue",
-    () => levenshtein("water", "hwage", { insertionCost: 0.75 }),
+    () => levenshtein("water", "hwage", { maxCost: 4, insertionCost: 0.75 }),
     2.75,
 );
 
 expect(
     "can set deletionCost to arbitaryValue",
-    () => levenshtein("water", "hwage", { deletionCost: 1.25 }),
+    () => levenshtein("water", "hwage", { maxCost: 4, deletionCost: 1.25 }),
     3.25,
 );
 
 expect(
     "can set replacementCost to arbitaryValue",
-    () => levenshtein("water", "hwage", { replacementCost: 1.5 }),
+    () => levenshtein("water", "hwage", { maxCost: 4, replacementCost: 1.5 }),
     3.5,
 );
 

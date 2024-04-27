@@ -1,5 +1,5 @@
 export type LevenshteinOptions = {
-    maxCost?: number;
+    maxCost: number;
     insertionCost?: number;
     deletionCost?: number;
     replacementCost?: number;
@@ -32,7 +32,7 @@ const levenshteinImpl = (
     let bestResult: number | null = null;
     if (aIndex < config.a.length) {
         const newCost = cost + config.insertionCost;
-        if (config.maxCost < 0 || newCost <= config.maxCost) {
+        if (newCost <= config.maxCost) {
             bestResult = levenshteinImpl(
                 config,
                 aIndex +
@@ -45,7 +45,7 @@ const levenshteinImpl = (
     }
     if (bIndex < config.b.length) {
         const newCost = cost + config.deletionCost;
-        if (config.maxCost < 0 || newCost <= config.maxCost) {
+        if (newCost <= config.maxCost) {
             const result = levenshteinImpl(
                 config,
                 aIndex,
@@ -60,7 +60,7 @@ const levenshteinImpl = (
     }
     if (aIndex < config.a.length && bIndex < config.b.length) {
         const newCost = cost + config.replacementCost;
-        if (config.maxCost < 0 || newCost <= config.maxCost) {
+        if (newCost <= config.maxCost) {
             const result = levenshteinImpl(
                 config,
                 aIndex +
@@ -87,30 +87,30 @@ const isUndefinedOrPositive = (x: number | undefined): boolean => {
 export const levenshtein = (
     a: string,
     b: string,
-    options?: LevenshteinOptions,
+    options: LevenshteinOptions,
 ) => {
     if (!isUndefinedOrPositive(options?.maxCost))
-        throw new Error(`Invalid value for maxCost: ${options?.maxCost}`);
+        throw new Error(`Invalid value for maxCost: ${options.maxCost}`);
     if (!isUndefinedOrPositive(options?.insertionCost))
         throw new Error(
-            `Invalid value for insertionCost: ${options?.insertionCost}`,
+            `Invalid value for insertionCost: ${options.insertionCost}`,
         );
     if (!isUndefinedOrPositive(options?.deletionCost))
         throw new Error(
-            `Invalid value for deletionCost: ${options?.deletionCost}`,
+            `Invalid value for deletionCost: ${options.deletionCost}`,
         );
     if (!isUndefinedOrPositive(options?.replacementCost))
         throw new Error(
-            `Invalid value for replacementCost: ${options?.replacementCost}`,
+            `Invalid value for replacementCost: ${options.replacementCost}`,
         );
     return levenshteinImpl(
         {
             a,
             b,
-            maxCost: options?.maxCost ?? -1,
-            insertionCost: options?.insertionCost ?? 1,
-            deletionCost: options?.deletionCost ?? 1,
-            replacementCost: options?.replacementCost ?? 1,
+            maxCost: options.maxCost,
+            insertionCost: options.insertionCost ?? 1,
+            deletionCost: options.deletionCost ?? 1,
+            replacementCost: options.replacementCost ?? 1,
         },
         0,
         0,

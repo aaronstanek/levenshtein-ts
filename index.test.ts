@@ -144,15 +144,33 @@ expect(
 );
 
 expect(
+    "insertionCost does not affect deletionCost or replacementCost",
+    () => levenshtein("water", "atep", { maxCost: 4, insertionCost: 0.75 }),
+    2,
+);
+
+expect(
     "can set deletionCost to arbitaryValue",
     () => levenshtein("water", "hwage", { maxCost: 4, deletionCost: 1.25 }),
     3.25,
 );
 
 expect(
+    "deletionCost does not affect insertionCost or replacementCost",
+    () => levenshtein("water", "zwatep", { maxCost: 4, deletionCost: 1.25 }),
+    2,
+);
+
+expect(
     "can set replacementCost to arbitaryValue",
     () => levenshtein("water", "hwage", { maxCost: 4, replacementCost: 1.5 }),
     3.5,
+);
+
+expect(
+    "replacementCost does not affect insertionCost or deletionCost",
+    () => levenshtein("water", "zwate", { maxCost: 4, replacementCost: 1.5 }),
+    2,
 );
 
 console.log(`Passed Tests: ${passedTests}`);

@@ -36,10 +36,31 @@ const levenshteinImpl = (
     }
     if (aIndex >= config.a.length && bIndex >= config.b.length) return cost;
     let bestResult: number | null = null;
+    if (
+        config.allowReplacement &&
+        aIndex < config.a.length &&
+        bIndex < config.b.length
+    ) {
+        const newCost = cost + config.replacementCost;
+        if (newCost <= config.maxCost) {
+            bestResult = levenshteinImpl(
+                config,
+                aIndex +
+                    1 +
+                    +((config.a.codePointAt(aIndex) as number) > 0xffff),
+                bIndex +
+                    1 +
+                    +((config.b.codePointAt(bIndex) as number) > 0xffff),
+                newCost,
+            );
+            if (bestResult !== null)
+                config.maxCost = Math.min(config.maxCost, bestResult);
+        }
+    }
     if (config.allowInsertion && bIndex < config.b.length) {
         const newCost = cost + config.insertionCost;
         if (newCost <= config.maxCost) {
-            bestResult = levenshteinImpl(
+            const result = levenshteinImpl(
                 config,
                 aIndex,
                 bIndex +
@@ -47,6 +68,14 @@ const levenshteinImpl = (
                     +((config.b.codePointAt(bIndex) as number) > 0xffff),
                 newCost,
             );
+            if (
+                bestResult === null ||
+                (result !== null && result < bestResult)
+            ) {
+                bestResult = result;
+                if (bestResult !== null)
+                    config.maxCost = Math.min(config.maxCost, bestResult);
+            }
         }
     }
     if (config.allowDeletion && aIndex < config.a.length) {
@@ -60,29 +89,14 @@ const levenshteinImpl = (
                 bIndex,
                 newCost,
             );
-            if (bestResult === null || (result !== null && result < bestResult))
+            if (
+                bestResult === null ||
+                (result !== null && result < bestResult)
+            ) {
                 bestResult = result;
-        }
-    }
-    if (
-        config.allowReplacement &&
-        aIndex < config.a.length &&
-        bIndex < config.b.length
-    ) {
-        const newCost = cost + config.replacementCost;
-        if (newCost <= config.maxCost) {
-            const result = levenshteinImpl(
-                config,
-                aIndex +
-                    1 +
-                    +((config.a.codePointAt(aIndex) as number) > 0xffff),
-                bIndex +
-                    1 +
-                    +((config.b.codePointAt(bIndex) as number) > 0xffff),
-                newCost,
-            );
-            if (bestResult === null || (result !== null && result < bestResult))
-                bestResult = result;
+                if (bestResult !== null)
+                    config.maxCost = Math.min(config.maxCost, bestResult);
+            }
         }
     }
     return bestResult;

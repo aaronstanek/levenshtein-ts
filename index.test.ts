@@ -242,5 +242,38 @@ expect(
     1,
 );
 
+expect(
+    "can insert into long text",
+    () =>
+        levenshtein(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia erat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia @erat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            { maxCost: 1 },
+        ),
+    1,
+);
+
+expect(
+    "can delete from long text",
+    () =>
+        levenshtein(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia erat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia rat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            { maxCost: 1 },
+        ),
+    1,
+);
+
+expect(
+    "can replace into long text",
+    () =>
+        levenshtein(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia erat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ted lacinia erat vitae feugiat vestibulum. Cras sodales hendrerit est ac elementum.",
+            { maxCost: 1 },
+        ),
+    1,
+);
+
 console.log(`Passed Tests: ${passedTests}`);
 console.log(`Failed Tests: ${failedTests}`);

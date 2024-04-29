@@ -173,5 +173,39 @@ expect(
     2,
 );
 
+expect(
+    "can disallow insertions",
+    () => levenshtein("box", "abox", { maxCost: 3, allowInsertion: false }),
+    null,
+);
+
+expect(
+    "disallowing insertions does not prevent deletions or replacements",
+    () => levenshtein("water", "atep", { maxCost: 3, allowInsertion: false }),
+    2,
+);
+
+expect(
+    "can disallow deletions",
+    () => levenshtein("box", "ox", { maxCost: 3, allowDeletion: false }),
+    null,
+);
+
+expect(
+    "disallowing deletions does not prevent insertions or replacements",
+    () =>
+        levenshtein("water", "zwatep", {
+            maxCost: 3,
+            allowDeletion: false,
+        }),
+    2,
+);
+
+expect(
+    "disallowing repalcements forces use of insertions and deletions",
+    () => levenshtein("a", "b", { maxCost: 3, allowReplacement: false }),
+    2,
+);
+
 console.log(`Passed Tests: ${passedTests}`);
 console.log(`Failed Tests: ${failedTests}`);

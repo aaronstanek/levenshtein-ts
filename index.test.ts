@@ -207,5 +207,40 @@ expect(
     2,
 );
 
+expect(
+    "inserting a non-BMP character only counts as one insertion",
+    () => levenshtein("", String.fromCodePoint(0x10ffff), { maxCost: 1 }),
+    1,
+);
+
+expect(
+    "deleting a non-BMP character only counts as one deletion",
+    () => levenshtein(String.fromCodePoint(0x10ffff), "", { maxCost: 1 }),
+    1,
+);
+
+expect(
+    "replacing a BMP character with a non-BMP character counts as one replacement",
+    () => levenshtein("a", String.fromCodePoint(0x10ffff), { maxCost: 1 }),
+    1,
+);
+
+expect(
+    "replacing a non-BMP character with a BMP character only counts as one replacement",
+    () => levenshtein(String.fromCodePoint(0x10ffff), "a", { maxCost: 1 }),
+    1,
+);
+
+expect(
+    "replacing a non-BMP character with another non-BMP character only counts as one replacement",
+    () =>
+        levenshtein(
+            String.fromCodePoint(0x10fffd),
+            String.fromCodePoint(0x10ffff),
+            { maxCost: 1 },
+        ),
+    1,
+);
+
 console.log(`Passed Tests: ${passedTests}`);
 console.log(`Failed Tests: ${failedTests}`);

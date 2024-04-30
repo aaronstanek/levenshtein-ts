@@ -12,6 +12,7 @@ type LevenshteinImplConfig = {
     a: string;
     b: string;
     maxCost: number;
+    reducedMaxCost: number;
     allowInsertion: boolean;
     insertionCost: number;
     allowDeletion: boolean;
@@ -35,7 +36,7 @@ const levenshteinImpl = (
         bIndex += increment;
     }
     if (aIndex >= config.a.length && bIndex >= config.b.length) {
-        config.maxCost = Math.min(config.maxCost, cost);
+        config.reducedMaxCost = cost;
         return cost;
     }
     let bestResult: number | null = null;
@@ -45,7 +46,7 @@ const levenshteinImpl = (
         bIndex < config.b.length
     ) {
         const newCost = cost + config.replacementCost;
-        if (newCost <= config.maxCost) {
+        if (newCost < config.reducedMaxCost && newCost <= config.maxCost) {
             bestResult = levenshteinImpl(
                 config,
                 aIndex +
@@ -60,7 +61,7 @@ const levenshteinImpl = (
     }
     if (config.allowInsertion && bIndex < config.b.length) {
         const newCost = cost + config.insertionCost;
-        if (newCost <= config.maxCost) {
+        if (newCost < config.reducedMaxCost && newCost <= config.maxCost) {
             const result = levenshteinImpl(
                 config,
                 aIndex,
@@ -75,7 +76,7 @@ const levenshteinImpl = (
     }
     if (config.allowDeletion && aIndex < config.a.length) {
         const newCost = cost + config.deletionCost;
-        if (newCost <= config.maxCost) {
+        if (newCost < config.reducedMaxCost && newCost <= config.maxCost) {
             const result = levenshteinImpl(
                 config,
                 aIndex +
@@ -121,6 +122,7 @@ export const levenshtein = (
             a,
             b,
             maxCost: options.maxCost,
+            reducedMaxCost: Infinity,
             allowInsertion: options.allowInsertion ?? true,
             insertionCost: options.insertionCost ?? 1,
             allowDeletion: options.allowDeletion ?? true,
